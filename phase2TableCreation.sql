@@ -1,0 +1,507 @@
+-- -- --     -- Hospital​
+
+-- -- --     --     h_name, h_address, h_doctors, h_patients, h_riskLevel​
+
+-- -- --     -- Outcome​
+
+-- -- --     --     o_caseID, o_dayspositive, o_comments, o_status​
+
+-- -- --     -- Location​
+
+-- -- --     --     l_city, l_country, l_state, l_lockdown​
+
+-- -- --     -- Person​
+
+-- -- --     --     p_name, p_address, p_dob, p_comment​
+
+-- -- --     -- Result ​
+
+-- -- --     --     r_personID, r_caseID, r_date, r_result​
+
+-- -- --     -- Symptoms ​
+
+-- -- --     --     s_caseID, s_symptom, s_severity ​
+
+-- -- --     -- Testing​
+
+-- -- --     --     t_type, t_units, t_D.O.B​
+
+-- -- --     -- Needs Hospital​
+
+-- -- --     --     nh_address, nh_riskLevel, nh_symptom, nh_severity, nh_descision​
+
+-- -- --     -- Testing Availability​
+
+-- -- --     --     ta_personID, ta_type, ta_units, ta_comment, ta_givenTest​
+
+-- DROP TABLE Location;
+-- DROP TABLE Hospitals;
+-- DROP TABLE NeedsHospital;
+-- DROP TABLE Outcome;
+-- DROP TABLE Person;
+-- DROP TABLE Results;
+-- DROP TABLE Symptoms;
+-- DROP TABLE Testing;
+-- DROP TABLE TestingAvailability;
+
+-- CREATE TABLE Location(
+--     l_city char(32) NOT NULL, 
+--     l_country char(32) NOT NULL, 
+--     l_state char(32) NOT NULL, 
+--     l_lockdown char(8)
+-- );
+
+-- INSERT INTO Location  VALUES('San Diego','United States','California','YES')
+-- INSERT INTO Location  VALUES('Seattle', 'Washington', 'United States', 'YES')
+-- INSERT INTO Location  VALUES('New York', 'New York', 'United States', 'YES')
+-- INSERT INTO Location  VALUES('Dallas', 'Texas', 'United States', 'NO')
+-- INSERT INTO Location  VALUES('Omaha', 'Nebraska', 'United States','PARTIAL')
+-- INSERT INTO Location  VALUES('London', 'Greater London', 'England','YES')
+-- INSERT INTO Location  VALUES('Paris', 'Île-de-France', 'France','YES')
+-- INSERT INTO Location  VALUES('Rio de Janeiro', 'Rio de Janeiro', 'Brazil','NO')
+-- INSERT INTO Location  VALUES('Beijing', 'Hebei', 'China','NO')
+-- INSERT INTO Location  VALUES('Tokyo', 'Mikawa', 'Japan','NO')
+-- INSERT INTO Location  VALUES('Seoul', 'Jeju', 'South Korea','NO')
+-- INSERT INTO Location  VALUES('Stockholm', 'Södermanland County', 'Sweden','YES')
+-- INSERT INTO Location  VALUES('Melbourne', 'New South Wales', 'Australia','YES')
+-- INSERT INTO Location  VALUES('Auckland', 'Auckland', 'New Zealand','NO')
+-- INSERT INTO Location  VALUES('New Dehli', 'Dehli', 'India','YES')
+
+
+-- CREATE TABLE Person(
+--     p_ID decimal(8, 0) NOT NULL,
+--     p_name char(32) NOT NULL, 
+--     p_address char(32) NOT NULL, 
+--     p_dob date NOT NULL, 
+--     p_comment varchar(128)
+-- );
+
+-- INSERT INTO Person VALUES(1, 'John King', '893 Maria Avenue, San Diego, California', '1987-03-27', 'Started feeling sick yesterday')
+-- INSERT INTO Person VALUES(2, 'Rachel Levine', '72 Adams Avenue, Phoenix, Arizona', '1999-06-13', 'Came in contact with someone that had Covid')
+-- INSERT INTO Person VALUES(3, 'Caroline Nader', '1353 1st Street, Bethesda, Maryland', '1956-08-28', 'Worried about having Covid')
+-- INSERT INTO Person VALUES(4, 'Micheal Walters', '17 Markel Street, Newcastle, UK', '1978-03-02', 'Feel Ok')
+-- INSERT INTO Person VALUES(5, 'Chris Tate', '144 New Haven Court, Santa Ana, California', '1993-10-28', 'Someone coughed near me the other day')
+
+-- CREATE TABLE Results(
+--     r_caseID decimal(8, 0) NOT NULL,
+--     r_personID decimal(8, 0) NOT NULL,
+--     r_date date NOT NULL,
+--     r_result char(16) NOT NULL
+-- );
+
+-- INSERT INTO Results VALUES(1, 1, '2020-06-23', 'POSITIVE')
+-- INSERT INTO Results VALUES(2, 2, '2020-08-15', 'POSITIVE')
+-- INSERT INTO Results VALUES(3, 3, '2020-03-29', 'POSITIVE')
+-- INSERT INTO Results VALUES(4, 4, '2020-09-09', 'NEGATIVE')
+-- INSERT INTO Results VALUES(5, 5, '2020-10-04', 'NEGATIVE')
+
+-- CREATE TABLE Symptoms(
+--     s_caseID decimal(8, 0) NOT NULL, 
+--     s_fever char(8) NOT NULL, 
+--     s_tiredness char(8) NOT NULL, 
+--     s_dryCough char(8) NOT NULL, 
+--     s_breathingDifficulty char(8) NOT NULL, 
+--     s_soreThroat char(8) NOT NULL, 
+--     s_severity ​decimal(1, 0) NOT NULL
+-- );
+
+-- INSERT INTO Symptoms VALUES(1, 'NO', 'NO', 'YES', 'YES', 'NO', 3)
+-- INSERT INTO Symptoms VALUES(2, 'NO', 'YES', 'NO', 'YES', 'NO', 2)
+-- INSERT INTO Symptoms VALUES(3, 'YES', 'NO', 'YES', 'YES', 'YES', 8)
+-- INSERT INTO Symptoms VALUES(4, 'YES', 'NO', 'YES', 'NO', 'NO', 6)
+-- INSERT INTO Symptoms VALUES(5, 'NO', 'YES', 'YES', 'NO', 'NO', 2)
+
+-- CREATE TABLE Testing(  
+--     t_type char(16) NOT NULL, 
+--     t_units decimal(12, 0) NOT NULL, 
+--     ​t_requests decimal(12, 0) NOT NULL
+-- );
+
+-- INSERT INTO Testing VALUES('RAPID', 8089, 15012);
+-- INSERT INTO Testing VALUES('4 DAY', 15325, 45197);
+-- INSERT INTO Testing VALUES('SAME DAY', 12400, 30092);
+-- INSERT INTO Testing VALUES('1 WEEK', 52170, 153842);
+
+-- CREATE TABLE NeedsHospital(
+--     nh_caseID decimal(8, 0) NOT NULL,
+--     nh_address char(32) NOT NULL, 
+--     nh_riskLevel decimal(1, 0) NOT NULL, 
+--     nh_fever char(8) NOT NULL, 
+--     nh_tiredness char(8) NOT NULL, 
+--     nh_dryCough char(8) NOT NULL, 
+--     nh_breathingDifficulty char(8) NOT NULL, 
+--     nh_soreThroat char(8) NOT NULL, 
+--     nh_severity decimal(1, 0) NOT NULL, 
+--     nh_descision char(8) NOT NULL
+-- );
+
+-- INSERT INTO NeedsHospital VALUES(1, '893 Maria Avenue, San Diego, California', 1, 'NO', 'NO', 'YES', 'YES', 'NO', 3, 'NO')
+-- INSERT INTO NeedsHospital VALUES(2, '72 Adams Avenue, Phoenix, Arizona', 2, 'NO', 'YES', 'NO', 'YES', 'NO', 2, 'NO')
+-- INSERT INTO NeedsHospital VALUES(3, '1353 1st Street, Bethesda, Maryland', 9,'YES', 'NO', 'YES', 'YES', 'YES', 8, 'YES')
+-- INSERT INTO NeedsHospital VALUES(4, '17 Markel Street, Newcastle, UK', 5, 'YES', 'NO', 'YES', 'NO', 'NO', 6, 'YES')
+-- INSERT INTO NeedsHospital VALUES(5, '144 New Haven Court, Santa Ana, California', 5, 'NO', 'YES', 'YES', 'NO', 'NO', 2, 'NO')
+
+-- CREATE TABLE TestingAvailability(
+--     ta_personID decimal(8, 0) NOT NULL,
+--     ta_type char(16) NOT NULL,
+--     ta_units decimal(12, 0) NOT NULL,
+--     ta_givenTest char(8) NOT NULL,
+--     ta_comment varchar(128) NOT NULL
+-- );
+
+-- INSERT INTO TestingAvailability VALUES(1, '1 WEEK', 52170, 'YES', 'Quick and Easy')
+-- INSERT INTO TestingAvailability VALUES(2, '1 WEEK', 52170, 'NO', 'Unneeded')
+-- INSERT INTO TestingAvailability VALUES(3, 'RAPID', 8089, 'YES', 'High Risk Patient')
+-- INSERT INTO TestingAvailability VALUES(3, 'SAME DAY', 12400, 'YES', 'For Confirmation')
+-- INSERT INTO TestingAvailability VALUES(4, '4 DAY', 15325, 'YES', 'Had difficulty getting sample')
+-- INSERT INTO TestingAvailability VALUES(5, '4 DAY', 15325, 'NO', 'No signs or symptoms')
+
+-- CREATE TABLE Hospitals(
+--     h_name char(32) NOT NULL,
+--     h_doctors decimal(8, 0) NOT NULL,
+--     h_patients decimal(8, 0) NOT NULL,
+--     h_riskLevel decimal(1, 0) NOT NULL,
+--     h_address char(32) NOT NULL,
+--     h_comments varchar(128) NOT NULL
+-- );
+
+-- CREATE TABLE Outcome(
+--     o_caseID decimal(8, 0) NOT NULL, 
+--     o_dayspositive decimal(4, 0) NOT NULL,
+--     o_status char(16) NOT NULL, 
+--     o_comments varchar(128) NOT NULL
+-- );
+
+-- INSERT INTO Hospitals VALUES('Walter Reed', 200, 450, 4, '4494 Palmer Rd N, Bethesda, MD 20814', 'Excellent Care')
+-- INSERT INTO Hospitals VALUES('Sharp Healthcare', 40, 200, 6, '765 Medical Center Ct, Chula Vista, CA 91911', 'Ok Care')
+-- INSERT INTO Hospitals VALUES('Ronald Reagan UCLA Medical Center', 150, 500, 7, '757 Westwood Plaza, Los Angeles, CA 90095', 'Covid-19 Testing Available')
+-- INSERT INTO Hospitals VALUES('Mayo Clinic', 250, 600, 8, '5777 East Mayo Boulevard. Phoenix, AZ 85054', 'Best in the World')
+-- INSERT INTO Hospitals VALUES('Freeman Hospital', 50, 150, 3, 'Freeman Rd, High Heaton, Newcastle upon Tyne NE7 7DN, United Kingdom', 'World Class Care')
+
+-- INSERT INTO Outcome VALUES(1, 17, 'doing well', 'no issues')
+-- INSERT INTO Outcome VALUES(2, 5, 'needs fluids', 'has aches and a sore throat')
+-- INSERT INTO Outcome VALUES(3, 8, 'struggling', 'needed respirator and fluids on day 6')
+-- INSERT INTO Outcome VALUES(4, 32, 'seems fully recovered', 'had difficulty breathing for 2 days, no need for ventilator and is doing well now')
+-- INSERT INTO Outcome VALUES(5, 2, 'no symptoms as of yet', 'came into contact with 3 family members in the last 3 days')
+
+-- INSERT INTO Person VALUES(1,'Kieron Smart','78 Elizabeth St. ,San Diego, CA. US','1997-04-13','Started feeling sick yesterday');
+-- INSERT INTO Person VALUES(2,'Layla Waller','8746 North Johnson Ave. ,Omaha, NE. US','1995-11-04','More tired than normal');
+-- INSERT INTO Person VALUES(3,'Misha Faulkner','141 Cross Lane ,Dallas, TX. US','1998-12-05','Bit more tired than normal');
+-- INSERT INTO Person VALUES(4,'Zach Armstrong','9763 Glendale Avenue ,Beijing, China','1967-08-07','Required for work');
+-- INSERT INTO Person VALUES(5,'Rosie Malone','83 New Ave. ,Paris, France','2000-03-22','tend to get headaches from time to time');
+-- INSERT INTO Person VALUES(6,'Kanye Stephenson','634 Tallwood Street ,London, England','2010-05-18','Ok nothing wrong');
+-- INSERT INTO Person VALUES(7,'Amirah Salinas','36 Coffee Rd. ,Dallas, TX. US','1974-03-19','have severe congestion');
+-- INSERT INTO Person VALUES(8,'Tanisha King','9952 Ridgewood St. ,San Diego, CA. US','1995-01-20','Ok nothing wrong');
+-- INSERT INTO Person VALUES(9,'Alix Myers','9452 Charles Road ,Omaha, NE. US','1995-06-29','Staying up more but ok');
+-- INSERT INTO Person VALUES(10,'Hudson Santana','97 S. Westport St. ,Omaha, NE. US','1995-08-29','Slight cough but ok');
+-- INSERT INTO Person VALUES(11,'Ayra Dudley','65 New Street ,London, England','2009-10-27','tend to get headaches from time to time');
+-- INSERT INTO Person VALUES(12,'Amaya Mcgregor','18 Windsor Street ,Stockholm, Sweden','1995-08-25','Required for work');
+-- INSERT INTO Person VALUES(13,'Keiren Hayes','7297 Green St. ,San Diego, CA. US','1961-02-04','Cough is getting worse');
+-- INSERT INTO Person VALUES(14,'Adrian Bradford','746 Water Drive ,Dallas, TX. US','1998-05-11','Symptoms are worse everyday');
+-- INSERT INTO Person VALUES(15,'Cameron Castro','31 Parker Court ,Paris, France','1988-04-09','came in contact with someone with covid');
+-- INSERT INTO Person VALUES(16,'Marianna Rose','23 South Arcadia Dr. ,Beijing, China','1962-11-05','have severe congestion');
+-- INSERT INTO Person VALUES(17,'Makayla Ritter','8640 Fawn St. ,San Diego, CA. US','1972-12-31','Cough is getting worse');
+-- INSERT INTO Person VALUES(18,'Shakira Sparks','7534 Cedarwood St. ,New Dehli, India','1994-05-20','Started feeling sick yesterday');
+-- INSERT INTO Person VALUES(19,'Cassius Cox','48 Fawn Court ,Omaha, NE. US','1973-12-30','came in contact with someone with covid');
+-- INSERT INTO Person VALUES(20,'Donell Sosa','51 Lafayette St. ,New Dehli, India','2001-11-27','Worried I might have covid');
+-- INSERT INTO Person VALUES(21,'Abdullah Meyers','851 North Jefferson Drive ,Stockholm, Sweden','1973-07-07','Worried I might have covid');
+-- INSERT INTO Person VALUES(22,'Aamina Carver','7174 Lawrence Street ,Omaha, NE. US','1996-12-24','came in contact with someone with covid');
+-- INSERT INTO Person VALUES(23,'Colm Boyd','1 River Drive ,London, England','1975-06-12','Bit more tired than normal');
+-- INSERT INTO Person VALUES(24,'Kameron Wheatley','975 West Sage Drive ,Auckland, NZ','1994-02-10','Required for work');
+-- INSERT INTO Person VALUES(25,'George Corbett','562 Wellington Lane,Seoul, SK','1969-06-18','Worried I might have covid');
+-- INSERT INTO Person VALUES(26,'Lily Brock','7081 Glenlake Lane ,Seoul, SK','1984-11-17','Slight cough but ok');
+-- INSERT INTO Person VALUES(27,'Joao Cannon','7093 W. Arnold St. ,New York, NY. US','1992-11-24','have severe congestion');
+-- INSERT INTO Person VALUES(28,'Nelson Herman','9644 Lakeshore St. ,San Diego, CA. US','1984-10-16','Body hurting a lot');
+-- INSERT INTO Person VALUES(29,'Clarence Wiggins','316 Alderwood Lane ,New York, NY. US','1975-01-31','came in contact with someone with covid');
+-- INSERT INTO Person VALUES(30,'Judy Cote','7312 Orange Lane ,Tokyo, Japan','1965-10-16','Symptoms are worse everyday');
+-- INSERT INTO Person VALUES(31,'Chanel Hart','36 Railroad Ave. ,Seattle, WA. US','1995-08-21','Body hurting a lot');
+-- INSERT INTO Person VALUES(32,'Amanah Parry','208 Poor House Avenue ,Tokyo, Japan','1985-03-03','Required for work');
+-- INSERT INTO Person VALUES(33,'Jolene Perez','3 1st Drive,Tokyo, Japan','1976-10-04','Required for work');
+-- INSERT INTO Person VALUES(34,'Bodhi Wiley','9350 Hudson Street ,Auckland, NZ','1962-05-08','Small fever');
+-- INSERT INTO Person VALUES(35,'Darsh Kavanagh','698 Walnut Dr. ,New York, NY. US','2009-12-26','Started feeling sick yesterday');
+-- INSERT INTO Person VALUES(36,'Greg Santiago','792 Shadow Brook Drive ,Melbourne, AUS','1989-11-13','Worried I might have covid');
+-- INSERT INTO Person VALUES(37,'Gracie-Mae Gale','227 Walt Whitman Drive ,Rio de Janeiro, Brazil','1984-03-22','Real sick cant move');
+-- INSERT INTO Person VALUES(38,'Faiz Patton','21 Miles Dr. ,Rio de Janeiro, Brazil','1983-10-26','Small fever');
+-- INSERT INTO Person VALUES(39,'Cayden Howell','8628 Woodsman St. ,Melbourne, AUS','1973-08-14','More tired than normal');
+-- INSERT INTO Person VALUES(40,'Una Gould','699 Colonial Lane ,Seattle, WA. US','1979-03-16','came in contact with someone with covid');
+-- INSERT INTO Person VALUES(41,'Tara Wood','356 East Green Court ,Paris, France','1963-01-02','Required for work');
+-- INSERT INTO Person VALUES(42,'Subhan Medrano','25 North Ivy Lane ,Tokyo, Japan','2007-09-28','Cough is getting worse');
+-- INSERT INTO Person VALUES(43,'Teo Barry','218 Peachtree Drive ,Dallas, TX. US','1992-07-20','Symptoms are worse everyday');
+-- INSERT INTO Person VALUES(44,'Yu Hyde','8371 Myrtle St. ,Melbourne, AUS','1998-03-12','Required for work');
+-- INSERT INTO Person VALUES(45,'Wiktor Beaumont','69 George St. ,Seattle, WA. US','1974-07-01','Staying up more but ok');
+-- INSERT INTO Person VALUES(46,'Jakub Busby','3 Andover Ave. ,Melbourne, AUS','1985-03-31','Body hurting a lot');
+-- INSERT INTO Person VALUES(47,'Cleo Humphreys','656 Stonybrook Dr.,New Dehli, India','1966-06-16','More tired than normal');
+-- INSERT INTO Person VALUES(48,'Michalina Ray','30 Smoky Hollow St.,London, England','1994-11-03','Small fever');
+-- INSERT INTO Person VALUES(49,'Jake Rowland','460 Cherry Hill Lane ,New York, NY. US','1985-07-24','Bit more tired than normal');
+-- INSERT INTO Person VALUES(50,'Cristina Reid','801 New Saddle St.,Seattle, WA. US','1982-01-03','Required for work');
+
+-- INSERT INTO TestingAvailability VALUES(1,'1 WEEK',52170,'YES','QUICK AND EASY');
+-- INSERT INTO TestingAvailability VALUES(2,'RAPID',8089,'YES','IN 10-15 HOURS');
+-- INSERT INTO TestingAvailability VALUES(3,'1 WEEK', 52170,'NO','RESEND TEST');
+-- INSERT INTO TestingAvailability VALUES(4,'SAME DAY',12400,'YES','TOOK 1 HOUR');
+-- INSERT INTO TestingAvailability VALUES(5,'4 DAY',15325,'NO','RETAKE SAMPLE');
+-- INSERT INTO TestingAvailability VALUES(6,'1 WEEK',52170,'NO','NO SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(7,'RAPID',8089,'YES','HIGH RISK PATIENT');
+-- INSERT INTO TestingAvailability VALUES(8,'4 DAY',15325,'NO','NO SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(9,'RAPID',8089,'NO','WEAK SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(10,'SAME DAY',12400,'YES','FOR CONFIRMATION');
+-- INSERT INTO TestingAvailability VALUES(11,'1 WEEK',52170,'YES','POSSIBLE SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(12,'RAPID',8089,'NO','NOT NEEDED');
+-- INSERT INTO TestingAvailability VALUES(13,'4 DAY',15325,'NO','QUICK AND EASY');
+-- INSERT INTO TestingAvailability VALUES(14,'SAME DAY',12400,'YES','POSSIBLE SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(15,'SAME DAY',12400,'NO','SMALL SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(16,'4 DAY',15325,'YES','RETAKE SAMPLE');
+-- INSERT INTO TestingAvailability VALUES(17,'RAPID',8089,'YES','HIGH RISK PATIENT');
+-- INSERT INTO TestingAvailability VALUES(18,'4 DAY',15325,'YES','QUICK AND EASY');
+-- INSERT INTO TestingAvailability VALUES(19,'1 WEEK', 52170,'NO','QUICK AND EASY');
+-- INSERT INTO TestingAvailability VALUES(20,'SAME DAY',12400,'YES','FOR CONFIRMATION');
+-- INSERT INTO TestingAvailability VALUES(21,'RAPID',8089,'NO','NO SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(22,'RAPID',8089,'NO','POSSIBLE SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(23,'1 WEEK', 52170,'NO','RETAKE SAMPLE');
+-- INSERT INTO TestingAvailability VALUES(24,'1 WEEK',52170,'YES','QUICK AND EASY');
+-- INSERT INTO TestingAvailability VALUES(25,'1 WEEK',52170,'YES','NO SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(26,'1 WEEK',52170,'NO','NO SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(27,'RAPID',8089,'YES','POSSIBLE SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(28,'4 DAY',15325,'NO','NO SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(29,'RAPID',8089,'NO','WEAK SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(30,'SAME DAY',12400,'YES','FOR CONFIRMATION');
+-- INSERT INTO TestingAvailability VALUES(31,'SAME DAY',12400,'YES','1 HOUR');
+-- INSERT INTO TestingAvailability VALUES(32,'RAPID',8089,'YES','IN 10-15 HOURS');
+-- INSERT INTO TestingAvailability VALUES(33,'RAPID',8089,'NO','NO SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(34,'SAME DAY',12400,'YES','1 HOUR');
+-- INSERT INTO TestingAvailability VALUES(35,'4 DAY',15325,'NO','RETAKE SAMPLE');
+-- INSERT INTO TestingAvailability VALUES(36,'SAME DAY',12400,'YES','POSSIBLE SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(37,'1 WEEK',52170,'NO','QUICK AND EASY');
+-- INSERT INTO TestingAvailability VALUES(38,'4 DAY',15325,'NO','NO SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(39,'RAPID',8089,'YES','WEAK SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(40,'1 WEEK',52170,'YES','NO SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(41,'RAPID',8089,'YES','HIGH RISK PATIENT');
+-- INSERT INTO TestingAvailability VALUES(42,'RAPID',8089,'YES','IN 10-15 HOURS');
+-- INSERT INTO TestingAvailability VALUES(43,'1 WEEK', 52170,'NO','NO SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(44,'1 WEEK',52170,'NO','RETAKE SAMPLE');
+-- INSERT INTO TestingAvailability VALUES(45,'SAME DAY',12400,'YES','WEAK SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(46,'SAME DAY',12400,'YES','WEAK SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(47,'RAPID',8089,'YES','QUICK AND EASY');
+-- INSERT INTO TestingAvailability VALUES(48,'4 DAY',15325,'YES','NO SYMPTOMS');
+-- INSERT INTO TestingAvailability VALUES(49,'1 WEEK',52170,'YES','QUICK AND EASY');
+-- INSERT INTO TestingAvailability VALUES(50,'4 DAY',15325,'NO','RETAKE SAMPLE');
+
+-- INSERT INTO Symptoms VALUES(1,'NO','NO','YES','YES','NO',4);
+-- INSERT INTO Symptoms VALUES(2,'NO','YES','NO','NO','NO',1);
+-- INSERT INTO Symptoms VALUES(3,'YES','NO','YES','YES','YES',8);
+-- INSERT INTO Symptoms VALUES(4,'YES','YES','NO','NO','NO',5);
+-- INSERT INTO Symptoms VALUES(5,'NO','NO','NO','NO','YES',2);
+-- INSERT INTO Symptoms VALUES(6,'YES','NO','NO','YES','YES',4);
+-- INSERT INTO Symptoms VALUES(7,'YES','YES','YES','NO','NO',7);
+-- INSERT INTO Symptoms VALUES(8,'YES','YES','YES','YES','YES',10);
+-- INSERT INTO Symptoms VALUES(9,'NO','NO','NO','YES','NO',3);
+-- INSERT INTO Symptoms VALUES(10,'NO','YES','YES','YES','NO',3);
+-- INSERT INTO Symptoms VALUES(11,'YES','NO','YES','NO','YES',7);
+-- INSERT INTO Symptoms VALUES(12,'YES','YES','YES','NO','NO',5);
+-- INSERT INTO Symptoms VALUES(13,'NO','NO','YES','NO','YES',5);
+-- INSERT INTO Symptoms VALUES(14,'NO','YES','NO','NO','NO',1);
+-- INSERT INTO Symptoms VALUES(15,'YES','NO','YES','YES','YES',8);
+-- INSERT INTO Symptoms VALUES(16,'NO','NO','YES','YES','NO',4);
+-- INSERT INTO Symptoms VALUES(17,'YES','NO','NO','NO','NO',1);
+-- INSERT INTO Symptoms VALUES(18,'YES','NO','YES','YES','YES',8);
+-- INSERT INTO Symptoms VALUES(19,'YES','YES','NO','NO','NO',5);
+-- INSERT INTO Symptoms VALUES(20,'NO','NO','NO','NO','YES',2);
+-- INSERT INTO Symptoms VALUES(21,'YES','NO','NO','YES','YES',4);
+-- INSERT INTO Symptoms VALUES(22,'YES','YES','YES','NO','NO',7);
+-- INSERT INTO Symptoms VALUES(23,'YES','YES','NO','YES','YES',10);
+-- INSERT INTO Symptoms VALUES(24,'NO','NO','NO','YES','NO',3);
+-- INSERT INTO Symptoms VALUES(25,'NO','YES','NO','YES','NO',3);
+-- INSERT INTO Symptoms VALUES(26,'YES','NO','YES','NO','YES',7);
+-- INSERT INTO Symptoms VALUES(27,'YES','YES','YES','NO','NO',5);
+-- INSERT INTO Symptoms VALUES(28,'NO','YES','YES','NO','NO',5);
+-- INSERT INTO Symptoms VALUES(29,'NO','YES','NO','NO','NO',1);
+-- INSERT INTO Symptoms VALUES(30,'YES','NO','YES','YES','YES',8);
+-- INSERT INTO Symptoms VALUES(31,'NO','NO','YES','YES','NO',4);
+-- INSERT INTO Symptoms VALUES(32,'NO','YES','NO','NO','NO',1);
+-- INSERT INTO Symptoms VALUES(33,'YES','NO','YES','YES','YES',8);
+-- INSERT INTO Symptoms VALUES(34,'YES','YES','NO','NO','NO',5);
+-- INSERT INTO Symptoms VALUES(35,'NO','NO','NO','NO','YES',2);
+-- INSERT INTO Symptoms VALUES(36,'YES','YES','NO','YES','NO',4);
+-- INSERT INTO Symptoms VALUES(37,'YES','YES','YES','NO','NO',7);
+-- INSERT INTO Symptoms VALUES(38,'YES','YES','YES','YES','YES',10);
+-- INSERT INTO Symptoms VALUES(39,'NO','YES','NO','YES','NO',3);
+-- INSERT INTO Symptoms VALUES(40,'NO','YES','NO','NO','NO',3);
+-- INSERT INTO Symptoms VALUES(41,'YES','NO','YES','NO','YES',7);
+-- INSERT INTO Symptoms VALUES(42,'YES','YES','NO','NO','NO',5);
+-- INSERT INTO Symptoms VALUES(43,'NO','NO','YES','NO','YES',5);
+-- INSERT INTO Symptoms VALUES(44,'NO','YES','NO','NO','NO',1);
+-- INSERT INTO Symptoms VALUES(45,'YES','YES','YES','YES','YES',8);
+-- INSERT INTO Symptoms VALUES(46,'NO','NO','YES','YES','NO',4);
+-- INSERT INTO Symptoms VALUES(47,'NO','NO','NO','NO','NO',1);
+-- INSERT INTO Symptoms VALUES(48,'YES','NO','YES','YES','YES',8);
+-- INSERT INTO Symptoms VALUES(49,'YES','YES','NO','NO','NO',5);
+-- INSERT INTO Symptoms VALUES(50,'NO','YES','YES','NO','YES',2);
+
+-- INSERT INTO Results VALUES(1,1,'2020-06-23','POSITIVE');
+-- INSERT INTO Results VALUES(2,2,'2020-05-05','POSITIVE');
+-- INSERT INTO Results VALUES(3,3,'2020-07-22','NEGATIVE');
+-- INSERT INTO Results VALUES(4,4,'2020-10-01','NEGATIVE');
+-- INSERT INTO Results VALUES(5,5,'2020-10-23','POSITIVE');
+-- INSERT INTO Results VALUES(6,6,'2020-05-12','NEGATIVE');
+-- INSERT INTO Results VALUES(7,7,'2020-09-24','POSITIVE');
+-- INSERT INTO Results VALUES(8,8,'2020-07-22','NEGATIVE');
+-- INSERT INTO Results VALUES(9,9,'2020-04-28','POSITIVE');
+-- INSERT INTO Results VALUES(10,10,'2020-10-10','NEGATIVE');
+-- INSERT INTO Results VALUES(11,11,'2020-08-21','POSITIVE');
+-- INSERT INTO Results VALUES(12,12,'2020-06-12','POSITIVE');
+-- INSERT INTO Results VALUES(13,13,'2020-11-01','NEGATIVE');
+-- INSERT INTO Results VALUES(14,14,'2020-09-04','POSITIVE');
+-- INSERT INTO Results VALUES(15,15,'2020-06-12','POSITIVE');
+-- INSERT INTO Results VALUES(16,16,'2020-07-01','POSITIVE');
+-- INSERT INTO Results VALUES(17,17,'2020-05-05','POSITIVE');
+-- INSERT INTO Results VALUES(18,18,'2020-07-22','NEGATIVE');
+-- INSERT INTO Results VALUES(19,19,'2020-03-04','POSITIVE');
+-- INSERT INTO Results VALUES(20,20,'2020-06-23','POSITIVE');
+-- INSERT INTO Results VALUES(21,21,'2020-05-12','NEGATIVE');
+-- INSERT INTO Results VALUES(22,22,'2020-09-24','POSITIVE');
+-- INSERT INTO Results VALUES(23,23,'2020-05-08','POSITIVE');
+-- INSERT INTO Results VALUES(24,24,'2020-04-28','NEGATIVE');
+-- INSERT INTO Results VALUES(25,25,'2020-09-17','NEGATIVE');
+-- INSERT INTO Results VALUES(26,26,'2020-08-21','POSITIVE');
+-- INSERT INTO Results VALUES(27,27,'2020-06-12','POSITIVE');
+-- INSERT INTO Results VALUES(28,28,'2020-11-01','NEGATIVE');
+-- INSERT INTO Results VALUES(29,29,'2020-04-04','NEGATIVE');
+-- INSERT INTO Results VALUES(30,30,'2020-05-20','POSITIVE');
+-- INSERT INTO Results VALUES(31,31,'2020-06-23','POSITIVE');
+-- INSERT INTO Results VALUES(32,32,'2020-05-05','POSITIVE');
+-- INSERT INTO Results VALUES(33,33,'2020-09-12','NEGATIVE');
+-- INSERT INTO Results VALUES(34,34,'2020-10-01','POSITIVE');
+-- INSERT INTO Results VALUES(35,35,'2020-05-05','NEGATIVE');
+-- INSERT INTO Results VALUES(36,36,'2020-05-12','NEGATIVE');
+-- INSERT INTO Results VALUES(37,37,'2020-07-16','POSITIVE');
+-- INSERT INTO Results VALUES(38,38,'2020-07-22','NEGATIVE');
+-- INSERT INTO Results VALUES(39,39,'2020-04-28','POSITIVE');
+-- INSERT INTO Results VALUES(40,40,'2020-10-10','POSITIVE');
+-- INSERT INTO Results VALUES(41,41,'2020-08-21','POSITIVE');
+-- INSERT INTO Results VALUES(42,42,'2020-06-12','POSITIVE');
+-- INSERT INTO Results VALUES(43,43,'2020-11-13','NEGATIVE');
+-- INSERT INTO Results VALUES(44,44,'2020-09-04','POSITIVE');
+-- INSERT INTO Results VALUES(45,45,'2020-03-26','POSITIVE');
+-- INSERT INTO Results VALUES(46,46,'2020-06-23','NEGATIVE');
+-- INSERT INTO Results VALUES(47,47,'2020-04-19','POSITIVE');
+-- INSERT INTO Results VALUES(48,48,'2020-07-22','NEGATIVE');
+-- INSERT INTO Results VALUES(49,49,'2020-07-13','NEGATIVE');
+-- INSERT INTO Results VALUES(50,50,'2020-06-15','POSITIVE');
+
+-- INSERT INTO Outcome VALUES(1,26,'mild cough','sore throat');
+-- INSERT INTO Outcome VALUES(2,50,'recovered','had difficulty breathing, but seems to be ok');
+-- INSERT INTO Outcome VALUES(3,10,'no symptoms yet','was with friends week ago');
+-- INSERT INTO Outcome VALUES(4,30,'struggling','multiple symptoms, has yet to recover');
+-- INSERT INTO Outcome VALUES(5,3,'deceased','attended gathering, no mask');
+-- INSERT INTO Outcome VALUES(6,46,'ER','attended work has yet to recover');
+-- INSERT INTO Outcome VALUES(7,3,'struggling','shortness of breath');
+-- INSERT INTO Outcome VALUES(8,25,'no symptoms','tested positive but no symptoms yet');
+-- INSERT INTO Outcome VALUES(9,60,'recovered','had to be treated multiple times');
+-- INSERT INTO Outcome VALUES(10,25,'deceased','difficult breathing for one week');
+-- INSERT INTO Outcome VALUES(11,90,'struggling','had covid the first time, mild coughs');
+-- INSERT INTO Outcome VALUES(12,48,'ER','heavy coughs, no signs of quick recovery');
+-- INSERT INTO Outcome VALUES(13,67,'recovered','had to be ER for weeks and seems to be fine');
+-- INSERT INTO Outcome VALUES(14,21,'high fever','slowly recovering');
+-- INSERT INTO Outcome VALUES(15,7,'doing well', 'no issues');
+-- INSERT INTO Outcome VALUES(16, 17, 'doing well', 'no issues');
+-- INSERT INTO Outcome VALUES(17, 5, 'needs fluids', 'has aches and a sore throat');
+-- INSERT INTO Outcome VALUES(18, 8, 'struggling', 'needed respirator and fluids on day 6');
+-- INSERT INTO Outcome VALUES(19, 32, 'seems fully recovered', 'tested positive but no symptoms');
+-- INSERT INTO Outcome VALUES(20, 2, 'no symptoms as of yet', 'came into contact with 3 family members in the last 3 days');
+-- INSERT INTO Outcome VALUES(21,26,'mild cough','sore throat');
+-- INSERT INTO Outcome VALUES(22,50,'recovered','had difficulty breathing, but seems to be ok');
+-- INSERT INTO Outcome VALUES(23,10,'no symptoms yet','was with friends week ago');
+-- INSERT INTO Outcome VALUES(24,30,'struggling','multiple symptoms, has yet to recover');
+-- INSERT INTO Outcome VALUES(25,3,'heavy cough','attended gathering, no mask');
+-- INSERT INTO Outcome VALUES(26,36,'ER','attended work has yet to recover');
+-- INSERT INTO Outcome VALUES(27,3,'deceased','shortness of breath');
+-- INSERT INTO Outcome VALUES(28,20,'no symptoms','tested positive but no symptoms yet');
+-- INSERT INTO Outcome VALUES(29,40,'recovered','had to be treated multiple times');
+-- INSERT INTO Outcome VALUES(30,25,'deceased','difficult breathing for one week');
+-- INSERT INTO Outcome VALUES(31,32,'struggling','had covid the first time, mild coughs');
+-- INSERT INTO Outcome VALUES(32,48,'deceased','heavy coughs, no signs of quick recovery');
+-- INSERT INTO Outcome VALUES(33,67,'recovered','had to be ER for weeks and seems to be fine');
+-- INSERT INTO Outcome VALUES(34,14,'high fever','slowly recovering');
+-- INSERT INTO Outcome VALUES(35,7,'doing well', 'no issues');
+-- INSERT INTO Outcome VALUES(36, 17, 'doing well', 'no issues');
+-- INSERT INTO Outcome VALUES(37, 5, 'needs fluids', 'has aches and a sore throat');
+-- INSERT INTO Outcome VALUES(38, 17, 'struggling', 'needed respirator and fluids on day 6');
+-- INSERT INTO Outcome VALUES(39, 32, 'seems fully recovered', 'had difficulty breathing for 2 days, no need for ventilator and is doing well now');
+-- INSERT INTO Outcome VALUES(40, 2, 'no symptoms as of yet', 'came into contact with 3 family members in the last 3 days');
+-- INSERT INTO Outcome VALUES(41,28,'mild cough','sore throat');
+-- INSERT INTO Outcome VALUES(42,52,'recovered','had difficulty breathing, but seems to be ok');
+-- INSERT INTO Outcome VALUES(43,10,'no symptoms yet','was with friends week ago');
+-- INSERT INTO Outcome VALUES(44,34,'struggling','multiple symptoms, has yet to recover');
+-- INSERT INTO Outcome VALUES(45,3,'heavy cough','attended gathering, no mask');
+-- INSERT INTO Outcome VALUES(46,29,'ER','attended work has yet to recover');
+-- INSERT INTO Outcome VALUES(47,31,'struggling','shortness of breath');
+-- INSERT INTO Outcome VALUES(48,20,'no symptoms','tested positive but no symptoms yet');
+-- INSERT INTO Outcome VALUES(49,48,'recovered','had to be treated multiple times');
+-- INSERT INTO Outcome VALUES(50,28,'deceased','difficult breathing for one week');
+
+-- INSERT INTO Hospitals VALUES('Scripps Mercy', 200, 450, 4, '4077 Fifth Ave. San Diego, CA', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('Virginia Mason', 150, 400, 3, '1100 9th Ave. Seattle, WA', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('Memorial Sloan Kettering', 200, 867, 4, '1275 York Ave. New York, NY', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('KPC Promise', 150, 340, 7, '7955 Harry Hines Blvd. Dallas, TX', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('Select Specialty', 100, 250, 3, '1870 S 75th St. Omaha, NE', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('St. Thomas''', 325, 550, 6, 'Westminster Bridge Rd, Bishop''s, London SE1 7EH, England', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('A.p.h.p.', 200, 350, 5, '28 Avenue du Dr Arnold Netter, Paris, France', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('Samaritano', 300, 675, 8, 'R. Bambina, 98 - Botafogo, Rio de Janeiro, Brazil', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('Beijing United Family Hospital', 500, 1200, 7, '2 Jiangtai Rd. Beijing, China', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('St. Luke''s International ', 750, 2300, 2, '9-1 Akashicho, Chuo City, Tokyo, Japan', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('SNUH', 800, 1100, 1, 'Seoul, South Korea', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('GHP Arytmi Center', 200, 600, 7, 'Sjukhusbacken 10, 118 61. Stockholm, Sweden', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('Epworth Cliveden', 450, 1325, 6, '29 Simpson St. Melbourne, Australia', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('Southern Cross Hospital Hamilton', 150, 600, 2, '21 Von Tempsky Street, Hamilton, New Zealand', 'Excellent Care');
+-- INSERT INTO Hospitals VALUES('Vikas Hospital', 1000, 3255, 5, '173C Kishangarh. New Dehli, India', 'Excellent Care');
+
+-- INSERT INTO NeedsHospital VALUES(1, '78 Elizabeth St. ,San Diego, CA. US', 3,'NO','NO','YES','YES','NO',4, 'NO');
+-- INSERT INTO NeedsHospital VALUES(2, '8746 North Johnson Ave. ,Omaha, NE. US', 1,'NO','YES','NO','NO','NO',1, 'NO');
+-- INSERT INTO NeedsHospital VALUES(3, '141 Cross Lane ,Dallas, TX. US', 8,'YES','NO','YES','YES','YES',8, 'YES');
+-- INSERT INTO NeedsHospital VALUES(4, '9763 Glendale Avenue ,Beijing, China', 4,'YES','YES','NO','NO','NO',5, 'YES');
+-- INSERT INTO NeedsHospital VALUES(5, '83 New Ave. ,Paris, France', 3,'NO','NO','NO','NO','YES',2, 'NO');
+-- INSERT INTO NeedsHospital VALUES(6, '634 Tallwood Street ,London, England', 5,'YES','NO','NO','YES','YES',4, 'NO');
+-- INSERT INTO NeedsHospital VALUES(7, '36 Coffee Rd. ,Dallas, TX. US', 7,'YES','YES','YES','NO','NO',7, 'YES');
+-- INSERT INTO NeedsHospital VALUES(8, '9952 Ridgewood St. ,San Diego, CA. US', 9,'YES','YES','YES','YES','YES',10, 'YES');
+-- INSERT INTO NeedsHospital VALUES(9, '9452 Charles Road ,Omaha, NE. US', 5,'NO','NO','NO','YES','NO',3, 'NO');
+-- INSERT INTO NeedsHospital VALUES(10, '97 S. Westport St. ,Omaha, NE. US', 3,'NO','YES','YES','YES','NO',3, 'NO');
+-- INSERT INTO NeedsHospital VALUES(11, '65 New Street ,London, England', 6,'YES','NO','YES','NO','YES',7, 'YES');
+-- INSERT INTO NeedsHospital VALUES(12, '18 Windsor Street ,Stockholm, Sweden', 7,'YES','YES','YES','NO','NO',5, 'YES');
+-- INSERT INTO NeedsHospital VALUES(13, '7297 Green St. ,San Diego, CA. US', 4,'NO','NO','YES','NO','YES',5, 'NO');
+-- INSERT INTO NeedsHospital VALUES(14, '746 Water Drive ,Dallas, TX. US', 8,'NO','YES','NO','NO','NO',1, 'NO');
+-- INSERT INTO NeedsHospital VALUES(15, '31 Parker Court ,Paris, France', 9,'YES','NO','YES','YES','YES',8, 'YES');
+-- INSERT INTO NeedsHospital VALUES(16, '23 South Arcadia Dr. ,Beijing, China', 5,'NO','NO','YES','YES','NO',4, 'NO');
+-- INSERT INTO NeedsHospital VALUES(17, '8640 Fawn St. ,San Diego, CA. US', 2,'YES','NO','NO','NO','NO',1, 'NO');
+-- INSERT INTO NeedsHospital VALUES(18, '7534 Cedarwood St. ,New Dehli, India', 7,'YES','NO','YES','YES','YES',8, 'YES');
+-- INSERT INTO NeedsHospital VALUES(19, '48 Fawn Court ,Omaha, NE. US', 6,'YES','YES','NO','NO','NO',5, 'YES');
+-- INSERT INTO NeedsHospital VALUES(20, '51 Lafayette St. ,New Dehli, India', 1,'NO','NO','NO','NO','YES',2, 'NO');
+-- INSERT INTO NeedsHospital VALUES(21, '851 North Jefferson Drive ,Stockholm, Sweden', 3,'YES','NO','NO','YES','YES',4, 'YES');
+-- INSERT INTO NeedsHospital VALUES(22, '7174 Lawrence Street ,Omaha, NE. US', 5,'YES','YES','YES','NO','NO',7, 'YES');
+-- INSERT INTO NeedsHospital VALUES(23, '1 River Drive ,London, England', 8,'YES','YES','NO','YES','YES',10, 'YES');
+-- INSERT INTO NeedsHospital VALUES(24, '975 West Sage Drive ,Auckland, NZ', 3,'NO','NO','NO','YES','NO',3, 'NO');
+-- INSERT INTO NeedsHospital VALUES(25, '562 Wellington Lane,Seoul, SK','1969-06-18', 4,'NO','YES','NO','YES','NO',3, 'NO');
+-- INSERT INTO NeedsHospital VALUES(26, '7081 Glenlake Lane ,Seoul, SK', 6,'YES','NO','YES','NO','YES',7, 'YES');
+-- INSERT INTO NeedsHospital VALUES(27, '7093 W. Arnold St. ,New York, NY. US', 6,'YES','YES','YES','NO','NO',5, 'YES');
+-- INSERT INTO NeedsHospital VALUES(28, '9644 Lakeshore St. ,San Diego, CA. US', 4,'NO','YES','YES','NO','NO',5, 'NO');
+-- INSERT INTO NeedsHospital VALUES(29, '316 Alderwood Lane ,New York, NY. US', 2,'NO','YES','NO','NO','NO',1, 'NO');
+-- INSERT INTO NeedsHospital VALUES(30, '7312 Orange Lane ,Tokyo, Japan', 9,'YES','NO','YES','YES','YES',8, 'YES');
+-- INSERT INTO NeedsHospital VALUES(31, '36 Railroad Ave. ,Seattle, WA. US', 4,'NO','NO','YES','YES','NO',4, 'NO');
+-- INSERT INTO NeedsHospital VALUES(32, '208 Poor House Avenue ,Tokyo, Japan', 2,'NO','YES','NO','NO','NO',1, 'NO');
+-- INSERT INTO NeedsHospital VALUES(33, '3 1st Drive,Tokyo, Japan', 7,'YES','NO','YES','YES','YES',8, 'YES');
+-- INSERT INTO NeedsHospital VALUES(34, '9350 Hudson Street ,Auckland, NZ', 5,'YES','YES','NO','NO','NO',5, 'YES');
+-- INSERT INTO NeedsHospital VALUES(35, '698 Walnut Dr. ,New York, NY. US', 3,'NO','NO','NO','NO','YES',2, 'NO');
+-- INSERT INTO NeedsHospital VALUES(36, '792 Shadow Brook Drive ,Melbourne, AUS', 4,'YES','YES','NO','YES','NO',4, 'NO');
+-- INSERT INTO NeedsHospital VALUES(37, '227 Walt Whitman Drive ,Rio de Janeiro, Brazil', 5,'YES','YES','YES','NO','NO',7, 'YES');
+-- INSERT INTO NeedsHospital VALUES(38, '21 Miles Dr. ,Rio de Janeiro, Brazil', 9,'YES','YES','YES','YES','YES',10, 'YES');
+-- INSERT INTO NeedsHospital VALUES(39, '8628 Woodsman St. ,Melbourne, AUS', 5,'NO','YES','NO','YES','NO',3, 'YES');
+-- INSERT INTO NeedsHospital VALUES(40, '699 Colonial Lane ,Seattle, WA. US', 3,'NO','YES','NO','NO','NO',3, 'NO');
+-- INSERT INTO NeedsHospital VALUES(41, '356 East Green Court ,Paris, France', 6,'YES','NO','YES','NO','YES',7, 'YES');
+-- INSERT INTO NeedsHospital VALUES(42, '25 North Ivy Lane ,Tokyo, Japan', 4,'YES','YES','NO','NO','NO',5, 'NO');
+-- INSERT INTO NeedsHospital VALUES(43, '218 Peachtree Drive ,Dallas, TX. US', 6,'NO','NO','YES','NO','YES',5, 'YES');
+-- INSERT INTO NeedsHospital VALUES(44, '8371 Myrtle St. ,Melbourne, AUS', 3,'NO','YES','NO','NO','NO',1, 'NO');
+-- INSERT INTO NeedsHospital VALUES(45, '69 George St. ,Seattle, WA. US', 9,'YES','YES','YES','YES','YES',8, 'YES');
+-- INSERT INTO NeedsHospital VALUES(46, '3 Andover Ave. ,Melbourne, AUS', 6,'NO','NO','YES','YES','NO',4, 'NO');
+-- INSERT INTO NeedsHospital VALUES(47, '656 Stonybrook Dr.,New Dehli, India', 1,'NO','NO','NO','NO','NO',1, 'NO');
+-- INSERT INTO NeedsHospital VALUES(48, '30 Smoky Hollow St.,London, England', 7,'YES','NO','YES','YES','YES',8, 'YES');
+-- INSERT INTO NeedsHospital VALUES(49, '460 Cherry Hill Lane ,New York, NY. US', 5,'YES','YES','NO','NO','NO',5, 'YES');
+-- INSERT INTO NeedsHospital VALUES(50, '801 New Saddle St.,Seattle, WA. US', 3,'NO','YES','YES','NO','YES',2, 'NO');
