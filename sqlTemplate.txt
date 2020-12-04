@@ -1,0 +1,87 @@
+USER:
+	---ADD PERSON---
+		1. INPUTS: name, addr, dob, comment
+		   INSERT into Person(assign new p_ID, name, addr, dob, comment)
+		   INSERT into TestingAvailability(p_id (from Person), "No Test Yet", 0, "No", "No comment")
+		   INSERT into Result(assign new caseID, p_id (from Person), "N/A", "Waiting for result")
+	---CHECK RESULTS---
+		2. INPUTS: name
+		   DISPLAY Person(name), Result(caseID, result, date) and NeedsHospital(descision)
+		3. INPUTS: caseID
+		   DISPLAY Person(name), Result(caseID, result, date) and NeedsHospital(descision)
+	---REVIEW HOSPITAL---
+		4. INPUTS: name OR caseID, comment
+		   UPDATE Person(comment)
+	---FIND NEARBY HOSPITAL---
+		5. INPUTS: name OR caseID
+		   DISPLAY address for input then look for Hospital in the same state
+		   if NONE DISPLAY message saying so
+		   else DISPLAY Hospital(name, address)
+DOCTOR:
+	---ENTER NEW CASE---
+		---TestingAvailability---
+			6. INPUTS: PersonID, Testing(type), givenTest, comment
+		 	   INSERT INTO TestingAvailability(PersonID, type, Testing(units), givenTest, comment)
+			   UPDATE Testing(requests += 1)
+	---UPDATE CASE---
+		---TESTING AVAILABILITY---
+			7. INPUTS: name, type, givenTest, comment
+			   UPDATE TestingAvailability(type, units, givenTest, comment)
+		---RESULT---
+			8. INPUTS: caseID, date, result
+			   UPDATE Results(date, result)
+		---NEEDS HOSPITAL---
+			9. INPUTS: caseID, descision
+			   UPDATE NeedsHospital(descision)
+		---OUTCOME---
+			10. INPUTS: caseID, status
+			    UPDATE Outcome(status)
+	---UPDATE SYMPTOM---
+		11. INPUTS: caseID, fever, tiredness, dryCough, diffBreathing, soreThroat, severity
+		    if caseID in Symptoms
+		    	UPDATE Symptoms(fever, tiredness, dryCough, diffBreathing, soreThroat, severity)
+		    	UPDATE NeedsHospital(fever, tiredness, dryCough, diffBreathing, soreThroat, severity, if severity increases "YES" else "NO")
+		    else
+		    	INSERT into Symptoms(caseID, fever, tiredness, dryCough, diffBreathing, soreThroat, severity)
+		    	INSERT into NeedsHospital(caseID, fever, tiredness, dryCough, diffBreathing, soreThroat, severity, "Not yet Decided")
+	---UPDATE COMMENT---
+		---TESTING AVAILABILITY---
+			12. INPUTS: caseID, comment
+			    UPDATE TestingAvailability(comment)
+		---OUTCOME---
+			13. INPUTS: caseID, comment
+			    UPDATE Outcome(comment)
+VISITOR:
+	---CHECK LOCKDOWN STATUS---
+		14. INPUTS: state, country
+		    DISPLAY Location(city, state, country, status) (display all cities in this state, country)
+	---VIEW SYMPTOM STATS---
+		15. INPUTS: NONE
+		    DISPLAY avg for each symptom and avg severity, the most common symptom, and least common symptom (this might take a few sql statements)
+	---BROWSE PUBLIC INFO---
+		16. INPUTS: tableName
+		    DISPLAY tableName excluding person names, IDs, birth dates, street names and house numbers (this might take some time)
+	(add to this section if u want... some of the phase 2 queries could add some complexity to the project)
+ADMIN:
+	---ADD LOCATION---
+		17. INPUTS: city, state, country, status
+		    INSERT into Location(city, state, country, status)
+	---ADD HOSPITAL---
+		18. INPUTS: name, doctors, patients, risk, addr, review
+		    INSERT into Hospitals(name, doctors, patients, risk, addr, review)
+	---DELETE A TUPLE---
+		19. INPUTS: tableName, key
+		    DELETE tuple from [tableName] where key --- this probably needs a few different statements depending on 
+							    --- the table. I'd wait til the interface is done to try to 
+							    --- implement this.
+	---DISPLAY FULL TABLE---
+		20. INPUTS: table name
+		    DISPLAY table with [table name]
+	---INSERT NEW SQL STATEMENT---
+		21. INPUTS: sql statement
+		    Display effect of statement (might get weird)
+	---RESET TABLES---
+		This might be difficult but would make demo's easier ---my idea was to have 2 tables, 
+		one that is updated when the program ends, and one that is updated while the program is running. 
+		If an admin logs in, they can roll back the database to when the program was started.
+	
