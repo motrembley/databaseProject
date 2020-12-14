@@ -537,25 +537,13 @@ def admin(_conn):
             #DELETE TUPLE
             print("Enter table name:")
             tableName = input()
-          #  print("Enter column you would like to use for a key:")
-          #  col = input()
-           # print("Enter key value:")
-           # key = int(input())
+        
             #SQL GOES HERE
             try:
 
                 if tableName in ('Person'):
                     print("Enter person's case ID:")
                     caseID = input()
-                #    print("Enter your full name:")
-                #    name = input()
-                #    print("Enter your address")
-                #    address = input()
-                 #   print("Enter your date of birth:")
-                 #   dob = input()
-                  #  print("Enter your comments:")
-                  #  comment = input()
-                  #  sql = _conn.execute("DELETE FROM Person where p_ID = ? and p_name = ? and p_address = ? and p_dob = ? and p_comment = ?",(caseID,name,address,dob,comment,))
                     sql = _conn.execute("DELETE FROM Person where p_ID = ?",(caseID,))
                     _conn.commit()
                     print("Person entry case deleted!")
